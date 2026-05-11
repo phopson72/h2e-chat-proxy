@@ -20,9 +20,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Zip artifact for deployment
+        run: zip -r release.zip . --exclude "*.git*"
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'h2e-chat-proxy'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: .
+          package: release.zip
