@@ -1,0 +1,15 @@
+name: Keep chat proxy warm
+
+# Pings the proxy so the Free (F1) App Service does not go to sleep.
+# GitHub may delay scheduled runs by a few minutes; that is fine here.
+on:
+  schedule:
+    - cron: '*/10 12-23,0-5 * * *'   # every 10 minutes, about 5 AM to 10 PM Arizona time
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: curl -fsS --max-time 60 https://h2e-chat-proxy-htgkd7hvhjhxd4gf.centralus-01.azurewebsites.net/health || true
